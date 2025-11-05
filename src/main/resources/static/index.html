@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Forecast</title>
+</head>
+<body>
+  <h2>Weather Forecast</h2>
+  <form id="form">
+    <label for="address">Enter your address:</label>
+    <input type="text" id="address" name="address" required />
+    <button type="submit">Get Forecast</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+	document.getElementById('form').addEventListener('submit', async (e) => {
+	    e.preventDefault();
+	    const address = document.getElementById('address').value;
+	    const res = await fetch(`/api/forecast?address=${encodeURIComponent(address)}`);
+	    const data = await res.json();
+
+	    document.getElementById('result').innerHTML = `
+	      <p><b>Location:</b> ${data.location}</p>
+	      <p><b>High:</b> ${data.high} °F</p>
+	      <p><b>Low:</b> ${data.low} °F</p>
+		  <p><b>Weather:</b> ${data.weather} </p>
+	      <p style="color: ${data.fromCache ? 'green' : 'gray'};">
+	        ${data.fromCache ? '✔ Data from cache' : '⏳ Fetched directly from API'}
+	      </p>
+	    `;
+	  });
+
+  </script>
+</body>
+</html>
+
